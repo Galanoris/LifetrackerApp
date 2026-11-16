@@ -1,12 +1,12 @@
 // Generates the PNG app icons into /public with no dependencies (zlib only).
-// Design: five ascending rounded bars (a 1-5 rating) on a deep teal square.
+// Design: five ascending rounded bars (a 1-5 rating) on a pink-to-orange sunset gradient.
 import { deflateSync } from 'node:zlib';
 import { writeFileSync } from 'node:fs';
 
-const BG_TOP = [22, 94, 99];
-const BG_BOTTOM = [13, 60, 72];
+const BG_TOP = [255, 92, 154]; // sunset pink
+const BG_BOTTOM = [255, 150, 70]; // sunset orange
 const BAR = [252, 252, 251];
-const BAR_LAST = [255, 196, 92];
+const BAR_LAST = [14, 154, 166]; // ocean teal
 
 function crc32(buf) {
   let c, crc = 0xffffffff;
@@ -74,10 +74,11 @@ writeFileSync(new URL('icon-512.png', out), png(512, art(1)));
 writeFileSync(new URL('apple-touch-icon.png', out), png(180, art(1)));
 writeFileSync(new URL('icon-maskable-512.png', out), png(512, art(0.8)));
 writeFileSync(new URL('favicon.svg', out), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-<rect width="100" height="100" rx="22" fill="#165e63"/>
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c9a"/><stop offset="1" stop-color="#ff9646"/></linearGradient></defs>
+<rect width="100" height="100" rx="22" fill="url(#g)"/>
 ${[0, 1, 2, 3, 4].map((i) => {
   const w = 9.2, x = 20 + i * (w + 3.5), h = 14 + i * 10.5;
-  return `<rect x="${x.toFixed(1)}" y="${(76 - h).toFixed(1)}" width="${w}" height="${h}" rx="${w / 2}" fill="${i === 4 ? '#ffc45c' : '#fcfcfb'}"/>`;
+  return `<rect x="${x.toFixed(1)}" y="${(76 - h).toFixed(1)}" width="${w}" height="${h}" rx="${w / 2}" fill="${i === 4 ? '#0e9aa6' : '#fcfcfb'}"/>`;
 }).join('\n')}
 </svg>
 `);
