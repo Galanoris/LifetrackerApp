@@ -3,7 +3,8 @@ import type { Dimension, Settings } from '../lib/types';
 import { db, saveDayNote, useLive } from '../lib/db';
 import { addDays, checkInDate, diffDays, formatLong, formatWeek, relativeTitle, todayKey } from '../lib/dates';
 import { NoteField, QuestionCard } from '../components/QuestionCard';
-import { groupByCategory } from '../components/grouping';
+import { groupByCategory, splitHeadline } from '../components/grouping';
+import { ArrowRight, ChevronLeft, ChevronRight } from '../components/Icons';
 
 interface Props {
   settings: Settings;
@@ -40,6 +41,7 @@ export function Today({ settings, dimensions, now, weeklyDue, onOpenWeek, onOpen
     setDate(d);
   };
 
+  const [head1, head2] = splitHeadline(relativeTitle(date, now));
   const backupAge = settings.lastBackupAt
     ? diffDays(today, settings.lastBackupAt.slice(0, 10))
     : diffDays(today, settings.seededAt.slice(0, 10));
@@ -47,24 +49,23 @@ export function Today({ settings, dimensions, now, weeklyDue, onOpenWeek, onOpen
 
   return (
     <>
-      <div class="header">
-        <div>
-          <h1>{relativeTitle(date, now)}</h1>
-          <div class="sub">{formatLong(date)}</div>
-        </div>
-        <div class="progress" aria-label={`${done} of ${daily.length} answered`}>
-          <strong>{done}</strong> / {daily.length}
-        </div>
-      </div>
-      <div class="progress-bar">
-        <div style={{ width: `${daily.length ? (done / daily.length) * 100 : 0}%` }} />
-      </div>
+      {weeklyDue && (
+        <button class="announce" onClick={() => onOpenWeek(weeklyDue)}>
+          Weekly check-in · {formatWeek(weeklyDue)} <ArrowRight />
+        </button>
+      )}
 
-      <div class="date-switch">
-        <button class="icon-btn" aria-label="Previous day" onClick={() => go(addDays(date, -1))}>‹</button>
-        <label class="date-label">
-          {date === today ? 'Today' : date === addDays(today, -1) ? 'Yesterday' : formatLong(date)}
-          <input
+      <div class="hero">
+        <div class="eyebrow">Daily check-in</div>
+        <h1 class="display">
+          {head1}
+          <span class="indent">{head2}</span>
+        </h1>
+        <div class="meta-row">
+          <button class="circle-btn" aria-label="Previous day" onClick={() => go(addDays(date, -1))}><ChevronLeft /></button>
+          <label class="key key-date">
+            {formatLong(date)}
+            <input
             type="date"
             value={date}
             max={today}
@@ -74,29 +75,26 @@ export function Today({ settings, dimensions, now, weeklyDue, onOpenWeek, onOpen
               if (v) go(v);
             }}
           />
-        </label>
-        <button class="icon-btn" aria-label="Next day" disabled={date >= today} onClick={() => go(addDays(date, 1))}>›</button>
-      </div>
-      {pinned && date !== defaultDate && (
-        <div style={{ textAlign: 'center', marginTop: -6, marginBottom: 6 }}>
-          <button class="link-btn" onClick={() => { setPinned(false); setDate(defaultDate); }}>
-            Back to {defaultDate === today ? 'today' : 'yesterday'}
-          </button>
-        </div>
-      )}
-
-      {weeklyDue && (
-        <div class="banner">
-          <span class="grow">
-            <strong>Weekly check-in</strong>
-            <br />
-            <span class="small">{formatWeek(weeklyDue)}</span>
+          </label>
+          <button class="circle-btn" aria-label="Next day" disabled={date >= today} onClick={() => go(addDays(date, 1))}><ChevronRight /></button>
+          <span class="spacer" />
+          <span class="key-num" aria-label={`${done} of ${daily.length} answered`}>
+            {done}<span>/{daily.length}</span>
           </span>
-          <button class="btn primary" onClick={() => onOpenWeek(weeklyDue)}>Start</button>
         </div>
-      )}
+        <div class="progress-line">
+          <div style={{ width: `${daily.length ? (done / daily.length) * 100 : 0}%` }} />
+        </div>
+        {pinned && date !== defaultDate && (
+          <div class="back-link">
+            <button class="link-btn" onClick={() => { setPinned(false); setDate(defaultDate); }}>
+              Back to {defaultDate === today ? 'today' : 'yesterday'} →
+            </button>
+          </div>
+        )}
+      </div>
       {backupDue && (
-        <div class="banner warn">
+        <div class="banner warn" style={{ marginTop: 24 }}>
           <span class="grow small">
             {settings.lastBackupAt ? `Last backup ${backupAge} days ago.` : 'No backup yet.'} Your data only lives on this phone.
           </span>
@@ -106,16 +104,16 @@ export function Today({ settings, dimensions, now, weeklyDue, onOpenWeek, onOpen
 
       {daily.length === 0 && <div class="empty">No daily questions. Add some in Settings.</div>}
 
-      {groupByCategory(daily).map(([cat, dims]) => (
+      {groupByCategory(daily).map(([cat, dims], i) => (
         <section key={cat}>
-          <div class="group-title">{cat}</div>
+          <div class="group-title"><span class="idx">{String(i + 1).padStart(2, '0')}</span>{cat}</div>
           {dims.map((d) => (
             <QuestionCard key={d.id} dim={d} period={date} entry={byDim.get(d.id)} />
           ))}
         </section>
       ))}
 
-      <div class="group-title">Note</div>
+      <div class="group-title"><span class="idx">✎</span>Note</div>
       <div class="card">
         <NoteField
           key={date}

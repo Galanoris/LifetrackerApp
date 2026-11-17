@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c9a"/><stop offset="1" stop-color="#ff9646"/></linearGradient></defs>
-<rect width="100" height="100" rx="22" fill="url(#g)"/>
-<rect x="20.0" y="62.0" width="9.2" height="14" rx="4.6" fill="#fcfcfb"/>
-<rect x="32.7" y="51.5" width="9.2" height="24.5" rx="4.6" fill="#fcfcfb"/>
-<rect x="45.4" y="41.0" width="9.2" height="35" rx="4.6" fill="#fcfcfb"/>
-<rect x="58.1" y="30.5" width="9.2" height="45.5" rx="4.6" fill="#fcfcfb"/>
-<rect x="70.8" y="20.0" width="9.2" height="56" rx="4.6" fill="#0e9aa6"/>
+<rect width="100" height="100" rx="22" fill="#131323"/>
+<rect x="24.0" y="62.0" width="7.2" height="14" rx="0.6" fill="rgb(89,63,97)"/>
+<rect x="37.2" y="51.5" width="7.2" height="24.5" rx="0.6" fill="rgb(145,110,140)"/>
+<rect x="50.4" y="41.0" width="7.2" height="35" rx="0.6" fill="rgb(209,157,182)"/>
+<rect x="63.6" y="30.5" width="7.2" height="45.5" rx="0.6" fill="rgb(230,155,135)"/>
+<rect x="76.8" y="20.0" width="7.2" height="56" rx="0.6" fill="rgb(240,151,90)"/>
 </svg>

@@ -9,3 +9,9 @@ export function groupByCategory(dims: Dimension[]): [string, Dimension[]][] {
   }
   return [...groups.entries()];
 }
+
+/** "How was yesterday?" -> ["How was", "yesterday?"] for the indented two-line display headline. */
+export function splitHeadline(t: string): [string, string] {
+  const words = t.split(' ');
+  return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+}

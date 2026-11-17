@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Dimension, Entry } from '../lib/types';
 import { clearEntry, setEntry } from '../lib/db';
+import { Minus, Plus } from './Icons';
 
 interface Props {
   dim: Dimension;
@@ -108,11 +109,11 @@ function Stepper({ dim, value, onChange }: { dim: Dimension; value: number | nul
   const unit = dim.scale === 'hours' ? ' h' : '';
   return (
     <div class="stepper">
-      <button aria-label="Less" onClick={() => onChange(clamp(value === null ? start : value - step))}>−</button>
+      <button class="circle-btn" aria-label="Less" onClick={() => onChange(clamp(value === null ? start : value - step))}><Minus /></button>
       <button class={`val${value !== null ? ' set' : ''}`} onClick={() => value === null && onChange(clamp(start))}>
-        {value === null ? <span class="muted">Tap: {fmt(start)}{unit}</span> : `${fmt(value)}${unit}`}
+        {value === null ? <span class="muted">TAP · {fmt(start)}{unit}</span> : `${fmt(value)}${unit}`}
       </button>
-      <button aria-label="More" onClick={() => onChange(clamp(value === null ? start : value + step))}>+</button>
+      <button class="circle-btn" aria-label="More" onClick={() => onChange(clamp(value === null ? start : value + step))}><Plus /></button>
     </div>
   );
 }

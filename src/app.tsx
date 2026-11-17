@@ -59,12 +59,6 @@ export function App() {
   );
   const weeklyDue = !!due && weeklyIds.length > 0 && weeklyAnswered !== undefined && weeklyAnswered < weeklyIds.length;
 
-  useEffect(() => {
-    const theme = settings?.theme ?? 'system';
-    if (theme === 'system') document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme', theme);
-  }, [settings?.theme]);
-
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
@@ -91,7 +85,7 @@ export function App() {
 
   return (
     <div class="app">
-      <main class="screen">
+      <main class="screen" key={tab}>
         {needRefresh && (
           <div class="banner">
             <span class="grow">A new version is available.</span>

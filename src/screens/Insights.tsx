@@ -65,9 +65,9 @@ export function Insights({ settings, dimensions, now }: Props) {
         ))}
       </div>
 
-      <div class="stat-row">
+      <div class="bento">
         <div class="stat">
-          <div class="num">{checked.size}<span class="muted" style={{ fontSize: 15, fontWeight: 500 }}> / {rangeDays}</span></div>
+          <div class="num">{checked.size}<span class="of"> / {rangeDays}</span></div>
           <div class="lbl">days checked in</div>
         </div>
         <div class="stat">
@@ -115,10 +115,9 @@ export function Insights({ settings, dimensions, now }: Props) {
 function Header() {
   return (
     <div class="header">
-      <div>
-        <h1>Insights</h1>
-        <div class="sub">Everything is computed on this phone.</div>
-      </div>
+      <div class="eyebrow">Patterns</div>
+      <h1>Insights</h1>
+      <div class="sub">Everything is computed on this phone.</div>
     </div>
   );
 }

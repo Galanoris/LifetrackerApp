@@ -1,10 +1,11 @@
 import { useState } from 'preact/hooks';
-import type { Dimension, Frequency, Settings, Theme } from '../lib/types';
+import type { Dimension, Frequency, Settings } from '../lib/types';
 import { buildBackup, db, restoreBackup, updateSettings, useLive, validateBackup } from '../lib/db';
 import { buildCsv } from '../lib/stats';
 import { dayName, diffDays, formatLong, todayKey } from '../lib/dates';
 import { pickFile, shareOrDownload } from '../lib/files';
 import { QuestionEditor } from './QuestionEditor';
+import { ArrowDown, ArrowUp } from '../components/Icons';
 
 interface Props {
   settings: Settings;
@@ -77,7 +78,10 @@ export function SettingsScreen({ settings, dimensions }: Props) {
 
   return (
     <>
-      <div class="header"><div><h1>Settings</h1></div></div>
+      <div class="header">
+        <div class="eyebrow">Good Life Tracker</div>
+        <h1>Settings</h1>
+      </div>
 
       {msg && <div class={`banner${msg.warn ? ' warn' : ''}`}><span class="grow small">{msg.text}</span><button class="link-btn" onClick={() => setMsg(null)}>OK</button></div>}
 
@@ -97,8 +101,8 @@ export function SettingsScreen({ settings, dimensions }: Props) {
               <div class="meta">{d.category} · {SCALE_LABEL[d.scale]}{d.higherIsBetter ? '' : ' · lower is better'}</div>
             </div>
             <div class="order-btns">
-              <button aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}>↑</button>
-              <button aria-label="Move down" disabled={i === list.length - 1} onClick={() => move(i, 1)}>↓</button>
+              <button aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}><ArrowUp /></button>
+              <button aria-label="Move down" disabled={i === list.length - 1} onClick={() => move(i, 1)}><ArrowDown /></button>
             </div>
           </div>
         ))}
@@ -134,18 +138,10 @@ export function SettingsScreen({ settings, dimensions }: Props) {
             <input type="time" value={settings.morningCutoff} onChange={(e) => { const v = (e.target as HTMLInputElement).value; if (v) updateSettings({ morningCutoff: v }); }} />
           </label>
         )}
-        <label class="field">
+        <label class="field" style={{ marginBottom: 0 }}>
           <span>Weekly check-in day</span>
           <select value={settings.weeklyCheckInDay} onChange={(e) => updateSettings({ weeklyCheckInDay: Number((e.target as HTMLSelectElement).value) })}>
             {[1, 2, 3, 4, 5, 6, 0].map((i) => <option key={i} value={i}>{dayName(i)}</option>)}
-          </select>
-        </label>
-        <label class="field" style={{ marginBottom: 0 }}>
-          <span>Appearance</span>
-          <select value={settings.theme} onChange={(e) => updateSettings({ theme: (e.target as HTMLSelectElement).value as Theme })}>
-            <option value="system">Match iPhone</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
           </select>
         </label>
       </div>
